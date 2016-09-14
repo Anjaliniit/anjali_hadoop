@@ -1,0 +1,32 @@
+package pack;
+
+import java.io.IOException;
+import java.util.TreeMap;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class MyReducer extends Reducer<Text,IntWritable,Text,IntWritable>{
+	
+	
+	TreeMap<String,Integer> map=new TreeMap<>(); 
+	public void reduce(Text inkeys, Iterable<IntWritable> invalues,Context context ){
+		int count=0;
+		for(IntWritable in:invalues)
+		{   
+			count++;
+		}
+		map.put(count,invalues.toString());
+	}
+	
+	public void cleanUp(Context context) throws IOException,InterruptedException
+	{
+		String key=map.lastKey();
+		int value=map.get(key);
+		context.write(new IntWritable(value));
+		
+	}
+	
+
+}

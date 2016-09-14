@@ -1,0 +1,17 @@
+package pack;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Job;
+
+public class MyDriver {
+	
+	public static void main(String ar[])
+	{
+		Configuration conf=new Configuration();
+		Job job=new Jon(conf,"sequence to binary");
+		
+		
+		
+	}
+
+}

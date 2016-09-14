@@ -1,0 +1,18 @@
+package pack;
+
+import org.w3c.dom.Text;
+
+public class MyMapper extends Mapper<LongWritable,Text,Text,IntWritable> {
+	
+	
+	public void map(LongWritable inkey,Text invalue,Context context)
+	{
+		
+    String log=invalue.toString();
+    String logparts[]=log.split(" ");
+    
+		
+		
+	}
+
+}

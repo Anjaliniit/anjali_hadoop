@@ -1,0 +1,25 @@
+package mypack;
+
+public class MyDriver {
+
+	public static void main(String ar[])
+	{
+		Configuration conf=new Configuration();
+		Job job=new Job(conf,"transaction2");
+		job.setJarByClass(MyMain.class);
+		job.setReducerClass(MyReducer.class);
+		job.setNumReduceTasks(1);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		MultipleInputs.addInputPath(job,new Path(ar[0]),TextInputFormat.Class,CustomerMapper.class);
+		MultipleInputs.addInputPath(job,new Path(ar[1]),TextInputFormat.Class,TransactionMapper.class);
+		FileOutputFormat.setOutputPath(job, new Path(ar[2]));
+		System.exit(job.waitForCompletion(true)?0:1);
+		
+	}
+	
+	
+	
+	
+	
+}

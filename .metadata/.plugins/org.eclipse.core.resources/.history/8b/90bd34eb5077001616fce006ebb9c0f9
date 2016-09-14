@@ -1,0 +1,30 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MyMapper extends Mapper<LongWritable,Text,Text,Text> {
+	
+	public void setUp()
+	{
+		BufferedReader br=new BufferedReader(new FileReader(""));
+		
+	}
+	
+	public void map(LongWritable inkey,Text invalue,Context context)
+	
+	{
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+
+}

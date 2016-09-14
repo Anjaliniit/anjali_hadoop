@@ -1,0 +1,9 @@
+package pack;
+
+public class MyMapper extends Mapper{
+	
+	public void map()
+	
+	
+
+}

@@ -1,0 +1,14 @@
+import org.apache.hadoop.io.DoubleWritable;
+
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class MyReducer extends Reducer<DoubleWritable,Text,DoubleWritable,Text>
+{
+
+	public void reduce(DoubleWritable inkey,Iterable<Text>,Context context)
+	{
+		
+		context.write(key, value);
+		
+	}
+}

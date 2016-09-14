@@ -1,0 +1,24 @@
+package pack;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+
+public class MyMapper extends Mapper<LongWritable,Text,Text,IntWritable> {
+	
+	
+	public void map(LongWritable inkey,Text invalue,Context context)
+	{
+		
+    String log=invalue.toString();
+    String logparts[]=log.split(" ");
+    String type=logparts[2];
+    context.write(new Text(type),new IntWritable(1));
+    
+		
+		
+	}
+
+}

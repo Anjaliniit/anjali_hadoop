@@ -1,0 +1,13 @@
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.Text;
+
+public class MyMapper extends Mapper<LongWritable,Text,Text,Text> {
+
+	public void map(LongWritable inputkey,Text invalue,Context context) throws IOException, InterruptedException
+	{
+		String txn=invalue.toString();
+		String txnparts[]=txn.split(",");
+		Double d=Double.parseDouble(txnparts[3]);
+		
+		context.write(new DoubleWritable(d), new Text(txn));		
+	}

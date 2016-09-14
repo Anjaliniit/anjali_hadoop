@@ -1,0 +1,12 @@
+package pack;
+
+public class Snippet {
+	Iterator itr=s.iterator();
+		    while(itr.hasNext())
+		    {  value=(Integer)itr.next();
+		    	name=map.get(itr.next());
+		    	context.write(new Text(name),new IntWritable(value));	
+		    } 
+		 
+}
+

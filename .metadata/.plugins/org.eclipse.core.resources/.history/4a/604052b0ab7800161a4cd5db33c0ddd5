@@ -1,0 +1,24 @@
+package pack;
+
+import java.util.TreeMap;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class MyReducer extends Reducer<Text,IntWritable,Text,IntWritable>{
+	
+	
+	TreeMap<String,Integer> map=new TreeMap<>(); 
+	public void reduce(Text inkeys, Iterable<IntWritable> invalues,Context context ){
+		int count=0;
+		for(IntWritable in:invalues)
+		{   
+			count++;
+		}
+		map.put(inkeys.toString(),count);
+		
+		
+	}
+
+}

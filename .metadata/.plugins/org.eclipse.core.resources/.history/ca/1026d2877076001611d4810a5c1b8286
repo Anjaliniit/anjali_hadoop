@@ -1,0 +1,17 @@
+package mypack;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Job;
+
+
+public class MyData {
+
+	
+	public static void main(String ar[])
+	{
+		Configuration conf=new Configuration();
+		Job job=new Job(conf,"reduce map side");
+		
+		
+	}
+}

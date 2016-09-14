@@ -1,0 +1,21 @@
+package mypack;
+
+import java.io.IOException;
+
+import org.apache.hadoop.io.DoubleWritable;
+
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.*;
+
+public class MyReducer extends Reducer<Text,DoubleWritable,Text,DoubleWritable> 
+{
+ public void reduce(Text inkey,Iterable<DoubleWritable> invals,Context context) throws IOException, InterruptedException
+ {
+	 double sum=0;
+	 
+	 for(DoubleWritable iter:invals)
+	 {
+		 sum=sum+iter.get();
+	 context.write(inkey,new DoubleWritable(sum));
+ }
+}}

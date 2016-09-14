@@ -1,0 +1,16 @@
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class MyReducer extends Reducer{
+	public void reduce(Text inkey,Iterable<DoubleWritable>invalue,Context context)
+	{   double sum=0;
+		for(DoubleWritable amt:invalue)
+		{
+			sum+=amt;
+			
+		}
+		
+	}
+
+}

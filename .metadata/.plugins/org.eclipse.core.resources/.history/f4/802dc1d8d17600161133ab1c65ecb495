@@ -1,0 +1,18 @@
+package mypack;
+
+import org.apache.hadoop.mapreduce.Reducer;
+
+
+public class MyReducer extends Reducer {
+	
+	public void reduce(Text inkey,Text invalue,Context context)
+	{
+		
+		
+		
+		
+	}
+	
+	
+
+}

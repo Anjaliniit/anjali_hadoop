@@ -1,0 +1,25 @@
+package mypack;
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MyMapper extends Mapper<LongWritable,Text,Text,IntWritable> {
+
+	public void map(LongWritable inputkey,Text invalue,Context context) throws IOException, InterruptedException
+	{
+		String string=invalue.toString();
+		String textvalue[]=string.split(" ");
+		for(String keyvalue:textvalue)
+		{
+			Text inkey=new Text(keyvalue);			
+			IntWritable inval=new IntWritable(1);
+			context.write(inkey, inval);
+		}
+		
+	}
+	
+	
+}

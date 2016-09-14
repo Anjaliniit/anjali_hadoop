@@ -1,0 +1,75 @@
+package mypack;
+import java.io.IOException;
+
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MyMapper extends Mapper<LongWritable,Text,Text,DoubleWritable> {
+
+	public void map(LongWritable inputkey,Text invalue,Context context) throws IOException, InterruptedException
+	{
+		String txn=invalue.toString();
+		String txnparts[]=txn.split(",");
+		String date=txnparts[1];
+		String month=date.substring(0,2);
+		Text inkey;
+		DoubleWritable inval;
+		switch(month)
+		{
+		case "01":
+			inkey=new Text("01");			
+			inval=new DoubleWritable(Double.parseDouble(txnparts[3]));
+			context.write(inkey, inval);
+			break;
+		case "02":
+			inkey=new Text("02");			
+			inval=new DoubleWritable(Double.parseDouble(txnparts[3]));
+			context.write(inkey, inval);
+			break;
+		case "03":
+			inkey=new Text("03");			
+			inval=new DoubleWritable(Double.parseDouble(txnparts[3]));
+			context.write(inkey, inval);
+			break;
+
+		case "04":
+			inkey=new Text("04");			
+			inval=new DoubleWritable(Double.parseDouble(txnparts[3]));
+			context.write(inkey, inval);
+			break;
+
+		case "05":
+			inkey=new Text("05");			
+			inval=new DoubleWritable(Double.parseDouble(txnparts[3]));
+			context.write(inkey, inval);
+			
+			break;
+
+		case "06":
+			break;
+
+		case "07":
+			break;
+
+		case "08":
+			break;
+
+		case "09":
+			break;
+
+		case "10":
+			break;
+
+		case "11":
+			break;
+
+		case "12":
+			break;
+		}
+		
+	}
+	
+	
+}

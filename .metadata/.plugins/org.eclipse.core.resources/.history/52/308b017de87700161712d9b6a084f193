@@ -1,0 +1,43 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MyMapper extends Mapper<LongWritable,Text,Text,DoubleWritable> {
+	private Map<String, String> custDetails = new HashMap<String, String>();
+	public void setUp(Context context) throws IOException
+	{
+		BufferedReader br=new BufferedReader(new FileReader("/home/hduser/customer/custs-large.dat"));
+		String line=br.readLine();
+		while(line!=null){
+		String lineparts[]=line.split(",");
+		String id=lineparts[0];
+		String name=lineparts[1];
+    	custDetails.put(id,name);
+    	line=br.readLine();
+		}
+		br.close();		
+	}
+	public void map(LongWritable inkey,Text invalue,Context context) throws IOException, InterruptedException	
+	{
+		String txn=invalue.toString();
+		String txnparts[]=txn.split(",");
+		String uid=txnparts[2];
+		Double amt=Double.parseDouble(txnparts[3]);
+		String name=custDetails.get(uid);
+		context.write(new Text(name),new DoubleWritable());
+				
+	}
+	
+	
+	
+	
+	
+	
+
+}

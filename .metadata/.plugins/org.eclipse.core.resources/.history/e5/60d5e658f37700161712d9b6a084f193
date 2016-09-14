@@ -1,0 +1,23 @@
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MyMapper extends Mapper<LongWritable,Text,lll, VALUEOUT> {
+	
+	public void map(LongWritable inkey,Text invalue,Context context)
+	{
+		Configuration conf=context.getConfiguration();
+		String userid=conf.get("uid");
+		String userdata=invalue.toString();
+		String userparts[]=userdata.split(",");
+		String id=userparts[0];
+		String prof=userparts[4];
+		if(userid.equals(id))
+		{
+			context.write(null,userdata);
+		}
+		
+	}
+
+}

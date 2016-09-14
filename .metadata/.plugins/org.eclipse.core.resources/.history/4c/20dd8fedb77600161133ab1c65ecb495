@@ -1,0 +1,22 @@
+package pack;
+
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MyMapper extends Mapper{
+	
+	public void map(LongWritable inkey,Text invalue, Context context)
+	{
+		String txn=invalue.toString();
+		String txnparts[]=txn.split(",");
+		Double d=Double.parseDouble(txnparts[3]);
+		
+		
+		
+		
+	}
+	
+	
+
+}

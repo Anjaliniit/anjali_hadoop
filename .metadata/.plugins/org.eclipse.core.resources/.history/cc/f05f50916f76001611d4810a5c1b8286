@@ -1,0 +1,33 @@
+package mypack;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+
+public class MyDriver {
+
+	public static void main(String ar[])
+	{
+		Configuration conf=new Configuration();
+		Job job=new Job(conf,"Mapreduce side");
+		job.setJarByClass(MyDriver.class);
+		job.setReducerClass(MyReducer.class);
+		job.setNumReduceTasks(1);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		MultipleInputs.addInputPath(job,new Path(ar[0]),TextInputFormat.Class,CustomerMapper.class);
+		MultipleInputs.addInputPath(job,new Path(ar[1]),TextInputFormat.Class,TransactionMapper.class);
+		FileOutputFormat.setOutputPath(job, new Path(ar[2]));
+		System.exit(job.waitForCompletion(true)?0:1);
+		
+	}
+	
+	
+	
+	
+	
+}

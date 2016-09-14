@@ -1,0 +1,14 @@
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Job;
+
+
+
+public class MyMain {
+public static void main(String ar[])
+{
+Configuration conf=new Configuration();
+Job job=new Job(conf,"map side join");
+
+
+}
+}

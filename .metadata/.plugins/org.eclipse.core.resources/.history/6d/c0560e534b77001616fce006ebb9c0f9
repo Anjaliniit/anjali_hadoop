@@ -1,0 +1,10 @@
+import javax.security.auth.login.Configuration;
+
+public class MyMain {
+public static void main(String ar[])
+{
+Configuration conf=new Configuration();
+
+
+}
+}

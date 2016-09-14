@@ -1,0 +1,29 @@
+package mypack;
+
+import java.io.IOException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Job;
+
+
+public class MyData {
+
+	
+	public static void main(String ar[]) throws IOException
+	{
+		Configuration conf=new Configuration();
+		Job job=new Job(conf,"reduce map side");
+		job.setJarByClass(MyData.class);
+		job.setReducerClass(MyReducer.class);
+		job.setNumReduceTasks(1);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		MultipleInputs.addInputPath(job,new Path(ar[0]),TextInputFormat.Class,CustomerMapper.class);
+		MultipleInputs.addInputPath(job,new Path(ar[1]),TextInputFormat.Class,TransactionMapper.class);
+		FileOutputFormat.setOutputPath(job, new Path(ar[2]));
+		System.exit(job.waitForCompletion(true)?0:1);
+		
+		
+		
+	}
+}

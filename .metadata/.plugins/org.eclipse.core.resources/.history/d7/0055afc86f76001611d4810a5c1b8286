@@ -1,0 +1,11 @@
+package mypack;
+
+public class MyData {
+
+	
+	public static void main(String ar[])
+	{
+		
+		
+	}
+}

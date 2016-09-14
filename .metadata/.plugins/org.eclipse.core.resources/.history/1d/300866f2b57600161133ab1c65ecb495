@@ -1,0 +1,15 @@
+package pack;
+
+public class MyMapper extends Mapper{
+	
+	public void map(LongWritable inkey,Text invalue, Context context)
+	{
+		
+		
+		
+		
+	}
+	
+	
+
+}

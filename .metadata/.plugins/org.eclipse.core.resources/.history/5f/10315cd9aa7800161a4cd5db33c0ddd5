@@ -1,0 +1,13 @@
+package pack;
+
+public class MyReducer extends Reducer<Text,InWritable,Text,IntWritable{
+	
+	
+	TreeMap<Text,Integer> map=new TreeMap<>(); 
+	public void reduce(Text inkeys, IntWritable invalues,Context context ){
+		
+		
+		
+	}
+
+}

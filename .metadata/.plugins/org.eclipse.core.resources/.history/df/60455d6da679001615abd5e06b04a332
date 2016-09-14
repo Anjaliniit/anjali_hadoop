@@ -1,0 +1,15 @@
+package udf1;
+
+public class SplitClass extends EvalFunc<String> {
+	
+	
+	public static void main(String ar[])
+	{
+		
+		String s="vcxh jhj jh jhk jhkj [log] hg ngu hngt hngh";
+		String s1[]=s.split("] ");
+		System.out.println(s1[1]);
+		
+	}
+
+}

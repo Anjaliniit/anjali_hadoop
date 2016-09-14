@@ -1,0 +1,10 @@
+package check;
+
+public class Main {
+public static void main(String ar[])
+{
+String s="[ERROR]";
+String s1=s.trim();
+System.out.println(s1);
+}
+}

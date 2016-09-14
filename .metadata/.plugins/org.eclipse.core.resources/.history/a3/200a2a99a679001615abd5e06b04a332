@@ -1,0 +1,9 @@
+package udf1;
+
+import org.apache.pig.EvalFunc;
+
+public class SplitClass extends EvalFunc<String> {
+	
+	
+	
+}
