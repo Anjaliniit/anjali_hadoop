@@ -1,0 +1,187 @@
+In social Project, there are total 3 modules:
+1. Calculate pension after x year.
+2. Total Scholarship to no orphan of each category.
+3. No of Female orphan i.e. Widowed and Divorced
+
+We have two file one is sample.dat and other is agegroup.txt. The sample.dat file is in json format
+so that first we convert that file into csv format using hive.
+
+HOW TO CONVERT sample.dat File into CSV FORMAT:
+
+1. store ur file on linux env(like /home/cloudera/Desktop)
+    by drag and drop using winscp server
+
+2. copy ur file on hadoop root 
+    hadoop fs put /home/cloudera/Desktop/Project/sample.dat /user/cloudera/
+
+3. create one table to store json file i.e. sample.dat as a single column.
+
+create table censusdata(jsondata string)
+row format delimited
+fields terminated by '\t'
+stored as textfile;
+
+4.  load data inpath '/home/cloudera/Desktop/Project/sample.dat' into table censusdata;
+
+NOTE: step 2 and 4 combine by one step there is a local keyword i.e. used with load command that first load the data to the hadoop then your table.
+
+load data local inpath '/home/cloudera/Desktop/Project/sample.dat' into table censusdata;
+Note:
+when we move data to our table then your txt or dat or json file is not available on hadoop location
+
+5. now create one another table according to ur requirement what data you would like to fetch from json sample.dat file
+
+create table census(age int,education string,maritalstatus string,gender string,taxfilerstatus string, income double,Parents string,
+countryofbirth string,citizenship string,weeksworked string)
+row format delimited fields terminated by ',' stored as textfile;
+NOTE:
+In hive by default fields terminated is comma i.e.  ,
+
+6. now load data into our table from table that contains json data as a single column
+insert overwrite table census
+select get_json_object(censusdata.jsondata,'$.Age'),get_json_object(censusdata.jsondata,'$.Education'),get_json_object(censusdata.jsondata,'$.MaritalStatus'),
+get_json_object(censusdata.jsondata,'$.Gender'),get_json_object(censusdata.jsondata,'$.TaxFilerStatus'),
+get_json_object(censusdata.jsondata,'$.Income'),get_json_object(censusdata.jsondata,'$.Parents'),
+get_json_object(censusdata.jsondata,'$.CountryOfBirth'),get_json_object(censusdata.jsondata,'$.Citizenship'),get_json_object(censusdata.jsondata,'$.WeeksWorked')
+from censusdata;
+
+
+-----------------------------------------------------------------------------
+1. FOR CALCULATING PENSION AFTER X YEAR.
+	we had used mapper 
+   For this we required one extra csv supporting file:
+   Firstly we have created one file in my sql.
+   	STEP FOR MYSQL:::::::::::::
+        First start my sql on cloudera window:
+         sudo service mysql start      // now press enter
+         mysql -u root -p              // now press enter and the enter password cloudera and you will get mysql prompt
+         now create database census by writing command:
+	create database census;		// here census database is created.
+	Use census data type command:
+        use census;			// here census database is start
+        Now create table pensionC having three columns :
+        create table pensionc(min double,max double,percent int);
+        insert data into pensionc table according to your category:
+          insert into pensionc values(0,3000,20)      //command to insert data. in the same way insert data in pensions according to the data at the bottom:
+data in pensionc table          
++-----------+-----------+---------+
+| minsalary | maxsalary | percent |
++-----------+-----------+---------+
+|         0 |      3000 |      20 |
+|      3001 |      6000 |      30 |
+|      6001 |      9000 |      40 |
++-----------+-----------+---------+
+
+
+description of pensionc table:
+
+	
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| minsalary | double  | YES  |     | NULL    |       |
+| maxsalary | double  | YES  |     | NULL    |       |
+| percent   | int(11) | YES  |     | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+
+
+      Now move data of pensionc to hadoop using sqoop
+      Once again go to the cloudera command prompt by tying quit command:
+      quit;    						//command to exit from sql.
+    on cloudera prompt type command:
+    sqoop import --connect jdbc:mysql://localhost/census --username root --password cloudera --table pensionc --target-dir '/user/cloudera/pension_table' --m 1
+
+    Here census is databasename
+          root and cloudera password of mysql 
+          --m for mapper 
+  after this one pension_table  folder is created on hadoop file system that contains part-m-00000 file having data of pensionc file.
+
+
+Now we have all the two input file. we have solved our problem using map reduce.
+------------------------------------------------------------------------
+2. TOTAL SCHOLARSHIP TO OPHANS OF EACH CATEGORY
+
+we had used map REDUCE
+   For this we required one extra csv supporting file:
+   Firstly we have created one file in my sql.
+   	STEP FOR MYSQL:::::::::::::
+        First start my sql on cloudera window:
+         sudo service mysql start      // now press enter
+         mysql -u root -p              // now press enter and the enter password cloudera and you will get mysql prompt
+         now create database census by writing command:
+	create database census;		// here census database is created.
+	Use census data type command:
+        use census;			// here census database is start
+        Now create table orphan_table having two columns :
+        create table pensionc(min double,max double,percent int);
+        insert data into pensionc table according to your category:
+          insert into pensionc values(0,3000,20)      //command to insert data. in the same way insert data in pensions according to the data at the bottom:
+data in pensionc table          --+
+
+we had used mapper 
+   For this we required one extra csv supporting file:
+   Firstly we have created one file in my sql.
+   	STEP FOR MYSQL:::::::::::::
+        First start my sql on cloudera window:
+         sudo service mysql start      // now press enter
+         mysql -u root -p              // now press enter and the enter password cloudera and you will get mysql prompt
+         now create database census by writing command:
+	create database census;		// here census database is created.
+	Use census data type command:
+        use census;			// here census database is start
+        Now create table orphan_table having 2 columns :
+        create table pension c(cat varchar(30),amount double);
+        insert data into orphan_table according to your category:
+          insert into orphan_table values('Father only Present',1000)      //command to insert data. in the same way insert data in pensions according to the data at the bottom:
+data in orphan_table   table
+
+
++------------------------+--------+
+| cat                    | amount |
++------------------------+--------+
+| Father only present    |   1000 |
+| Not in universe        |   3000 |
+| Neither parent present |   3000 |
+| Mother only present    |   2000 |
++------------------------+--------+
+
+
+description of orphan_table
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| cat    | varchar(30) | YES  |     | NULL    |       |
+| amount | double      | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+
+
+	
+
+
+      Now move data of orphan_table to hadoop using sqoop
+      Once again go to the cloudera command prompt by typing quit command:
+      quit;    						//command to exit from sql.
+    on cloudera prompt type command:
+    sqoop import --connect jdbc:mysql://localhost/census --username root --password cloudera --table orphan_table --target-dir '/user/cloudera/orphan_table' --m 1
+
+    Here census is databasename
+          root and cloudera password of mysql 
+          --m for mapper 
+  after this one pension_table  folder is created on hadoop file system that contains part-m-00000 file having data of pensionc file.
+
+
+Now we have two csv file solved problem using  pig:
+
+
+
+
+
+
+
+
+
+
+
+
+
+

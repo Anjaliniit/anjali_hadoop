@@ -1,0 +1,4 @@
+a = load '/txns-large.dat' using PigStorage(',') as(tid,tdate,uid,amt,cat,prod,city,state,payment);
+b = order a by amt DESC;
+dump b;
+

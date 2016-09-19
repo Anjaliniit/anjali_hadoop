@@ -1,0 +1,9 @@
+CREATE EXTERNAL TABLE json_serde_table (
+  id string,
+  person struct<email:string, first_name:string, last_name:string, location:struct<address:string, city:string, state:string, zipcode:string>, text:string, url:string>)
+ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'
+LOCATION '/tmp/json/';
+SELECT id, person.first_name, person.last_name, person.email, 
+person.location.address, person.location.city, person.location.state, 
+person.location.zipcode, person.text, person.url
+FROM json_serde_table LIMIT 5

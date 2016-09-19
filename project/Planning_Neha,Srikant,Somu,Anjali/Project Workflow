@@ -1,0 +1,32 @@
+1.In hive created database , and table from sample.dat from /user/cloudera/census folder of hadoop.
+create databse census;
+
+use census;
+
+create table demo(jsondata string) row format delimited stored as textfile;
+load data inpath '/home/cloudera/Desktop/sample.dat' into table demo;
+
+create table census_voter(age int,education string,maritalstatus string,gender string,taxfilerstatus string,income double,parents string,countryofbirth string,citizenship string,weekworked int) row format delimited fields terminated by ',' stored as textfile;
+insert overwrite table census_voter select get_json_object(jsondata,"$.Age"),get_json_object(jsondata,"$.Education"),get_json_object(jsondata,"$.MaritalStatus"),get_json_object(jsondata,"$.Gender"),get_json_object(jsondata,"$.TaxFilerStatus"),get_json_object(jsondata,"$.Income"),get_json_object(jsondata,"$.Parents"),get_json_object(jsondata,"$.CountryOfBirth"),get_json_object(jsondata,"$.Citizenship"),get_json_object(jsondata,"$.WeeksWorked") from demo;
+
+2.Now the csv has been created in the /user/hive/warehouse/census_voter folder of hadoop with name 000000_0,holding data in csv format , now we can access it in the map reduce program that we make .
+
+3.We write the code(Map Reduce).
+
+4.Create the jar , then store it in the home of machine.
+
+5.Use command to execute it on input file viz. /user/hive/warehouse/census_voter and a randome output folder(viz in /user/cloudera folder) which will be created to output.
+
+6. Created both applications for voters and senior citizen gender wise.
+
+7.Pig script to calculate total number of female and male .
+s1 = load '/user/hive/warehouse/censusdb.db/census_voter/000000_0' using PigStorage(',') as (age:int,education:chararray,maritalstatus:chararray,gender:chararray,taxfilerstatus:chararray,income:chararray,parents:chararray,countryofbirth:chararray,citizenship:chararray,weekworked:int);
+
+s2 = foreach s1 generate age,gender;
+
+s3 = group s2 by gender;
+
+s4 = foreach s3 generate group, COUNT(s2.age);
+
+dump s4;
+

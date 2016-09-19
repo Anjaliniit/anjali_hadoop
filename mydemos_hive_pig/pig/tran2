@@ -1,0 +1,6 @@
+a = load '/txns-large.dat' using PigStorage(',') as(tid:int,tdate:chararray,uid:int,amt:double,cat:chararray,prod:chararray,city:chararray,state:chararray,payment:chararray);
+b = filter a by amt>160;
+c = group b all;
+e = foreach c generate COUNT(b);
+dump e;
+

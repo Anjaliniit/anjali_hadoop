@@ -1,0 +1,54 @@
+Task 1.To determine the following things:
+Tools Used:PIG
+
+a)To find out the total income.
+
+a= load '/user/cloudera/census11' using PigStorage(',')as (age:int,edu:chararray,marital:chararray,gender:chararray,tax:chararray,income:double,parents:chararray,cob:chararray,citizen:chararray,weeks:int);
+b= foreach a generate 1 as one,income;
+c= group b all;
+d= foreach c generate SUM(b.income);
+store d into '/user/cloudera/finance1';
+
+b)To find out the total tax collected:
+
+
+
+c)To find out the total taxpayers.
+
+a= load '/user/cloudera/census11' using PigStorage(',')as (age:int,edu:chararray,marital:chararray,gender:chararray,tax:chararray,income:double,parents:chararray,cob:chararray,citizen:chararray,weeks:int);
+b= foreach a generate tax;
+c= filter b by tax!=' Nonfiler';
+d= foreach c generate 1 as one;
+e= group d by one;
+f= foreach e generate COUNT(d.one);
+store f into '/user/cloudera/finance33';
+
+d)To find out the tax paid as per male and female.
+
+
+
+Task 2:To find out the per capita income
+
+a = load '/user/cloudera/census11' using PigStorage(',') as (age:int,education:chararray,marital:chararray,gender:chararray,tax:chararray,income:double,parent:chararray,cob:chararray,citizenship:chararray,worked:int);
+b = foreach a generate 1 as one,income,age; 
+c = group b all;   
+describe c
+d = foreach c generate SUM(b.income)/COUNT(b.age);
+store d into '/user/cloudera/financetask2';
+
+
+Task 3:To find out the per capita income gender wise.
+
+a = load '/user/cloudera/census11' using PigStorage(',') as (age:int,education:chararray,marital:chararray,gender:chararray,tax:chararray,income:double,parent:chararray,cob:chararray,citizenship:chararray,worked:int);
+b = foreach a generate income,age,gender;
+c = group b by gender;
+d = foreach c generate group,SUM(b.income)/COUNT(b.age);
+store d into '/user/cloudera/financetask3';
+
+Task 4:To find out the per capita age wise.
+
+a = load '/user/cloudera/census11' using PigStorage(',') as (age:int,education:chararray,marital:chararray,gender:chararray,tax:chararray,income:double,parent:chararray,cob:chararray,citizenship:chararray,worked:int);
+b = foreach a generate age,income;
+c = group b by age;
+d = foreach c generate group,SUM(b.income)/COUNT(b.age);
+store d into '/user/cloudera/financetask4';

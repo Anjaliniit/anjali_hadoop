@@ -1,0 +1,8 @@
+a = load '/txns-large.dat' using PigStorage(',') as(tid:int,tdate:chararray,uid:int,amt:double,cat:chararray,prod:chararray,city:chararray,state,payment:chararray);
+b = foreach a generate uid,amt;
+c = group b by uid;
+d = foreach c generate group,SUM(b.amt) as tsum;
+e = order d by tsum;
+f = limit e 1;
+dump f;
+

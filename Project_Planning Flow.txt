@@ -1,0 +1,64 @@
+In planning Project, there are total modules:
+1. No of Senior citizen after x year's.
+2. No of Voter's  after x year's.
+3. No of Male and No of Female.
+4. No of citizen and no of immigrants of employment.
+
+We have two file one is sample.dat and other is agegroup.txt. The sample.dat file is in json format
+so that first we convert that file into csv format using hive.
+
+HOW TO CONVERT sample.dat File into CSV FORMAT:
+
+1. store ur file on linux env(like /home/cloudera/Desktop)
+    by drag and drop using winscp server
+
+2. copy ur file on hadoop root 
+    hadoop fs put /home/cloudera/Desktop/Project/sample.dat /user/cloudera/
+
+3. create one table to store json file i.e. sample.dat as a single column.
+
+create table censusdata(jsondata string)
+row format delimited
+fields terminated by '\t'
+stored as textfile;
+
+4.  load data inpath '/home/cloudera/Desktop/Project/sample.dat' into table censusdata;
+
+NOTE: step 2 and 4 combine by one step there is a local keyword i.e. used with load command that first load the data to the hadoop then your table.
+
+load data local inpath '/home/cloudera/Desktop/Project/sample.dat' into table censusdata;
+Note:
+when we move data to our table then your txt or dat or json file is not available on hadoop location
+
+5. now create one another table according to ur requirement what data you would like to fetch from json sample.dat file
+
+create table census(age int,education string,maritalstatus string,gender string,taxfilerstatus string, income double,Parents string,
+countryofbirth string,citizenship string,weeksworked string)
+row format delimited fields terminated by ',' stored as textfile;
+NOTE:
+In hive by default fields terminated is comma i.e.  ,
+
+6. now load data into our table from table that contains json data as a single column
+insert overwrite table census
+select get_json_object(censusdata.jsondata,'$.Age'),get_json_object(censusdata.jsondata,'$.Education'),get_json_object(censusdata.jsondata,'$.MaritalStatus'),
+get_json_object(censusdata.jsondata,'$.Gender'),get_json_object(censusdata.jsondata,'$.TaxFilerStatus'),
+get_json_object(censusdata.jsondata,'$.Income'),get_json_object(censusdata.jsondata,'$.Parents'),
+get_json_object(censusdata.jsondata,'$.CountryOfBirth'),get_json_object(censusdata.jsondata,'$.Citizenship'),get_json_object(censusdata.jsondata,'$.WeeksWorked')
+from censusdata;
+
+
+-----------------------------------------------------------------------------
+1. FOR CALCULATING NO OF SENIOR CITIZEN AFTER X YEAR & FOR CALCULATING NO OF VOTER AFTER X YEAR & NO OF CITIZEN AND NO OF IMMIGRANTS OF EMPLOYMENT
+	we had used mapper for all the task . we had created three mapper class for each and one common reducer and one driver class.
+2. NO OF MALE AND FEMALE
+      We had used pig for calculating
+
+
+
+
+
+
+
+
+
+

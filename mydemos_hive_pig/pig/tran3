@@ -1,0 +1,5 @@
+a = load '/txns-large.dat' using PigStorage(',') as(tid,tdate,uid,amt,cat,prod,city,state,payment);
+b = foreach a generate uid,amt;
+c = group b by uid;
+d = foreach c generate group,COUNT(b.amt),SUM(b.amt);
+dump d;

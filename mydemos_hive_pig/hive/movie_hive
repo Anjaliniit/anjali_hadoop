@@ -1,0 +1,45 @@
+comman step for all the commands
+
+
+1. store ur file on linux env(like /home/cloudera/Desktop)
+    by drag and drop using winscp server
+
+2. copy ur file on hadoop root 
+    hadoop fs -put /home/cloudera/Desktop/MoviesDetails.dat /
+    hive is case sensitive  
+
+3. create one table 
+
+create table movie(mid int,mname string,myear int,rating double,duration int)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+4.  load data inpath '/MoviesDetails.dat' into table movie
+
+NOTE: step 2 and 4 combine by one step there is a local keyword i.e. used with load command that first load the data to the hadoop then your table.
+    load data local inpath '/MovieDetails.dat' into table census_data     
+
+when we move data to our table then your txt or dat or json file is not available on hadoop location
+
+
+-----------First Query command
+
+select count(myear) from movie where myear>=1949 and myear<=1959;
+
+-----------second Query command
+
+select count(myear) from movie where rating>3.9;
+
+-----------third Query command
+
+select count(myear) from movie where duration>1.5;
+
+-----------fourth Query command
+
+select myear ,count(myear) from movie group by myear;
+
+-----------fifth Query command
+
+select count(*) from movie;
+

@@ -1,0 +1,95 @@
+census one query---------------
+
+1. store ur file on linux env(like /home/cloudera/Desktop)
+    by drag and drop using winscp server
+
+2. copy ur file on hadoop root 
+    hadoop fs put /home/cloudera/Desktop/agegroup.dat /
+    hadoop fs put /home/cloudera/Desktop/agegroup.dat /
+
+3. create one table 
+
+create table agegroup(age int,type string)
+row format delimited
+fields terminated by '\t'
+stored as textfile;
+
+4.  load data inpath '/agegroup.dat' into table agegroup
+
+NOTE: step 2 and 4 combine by one step there is a local keyword i.e. used with load command that first load the data to the hadoop then your table.
+    load data local inpath '/agegroup.dat' into table agegroup
+
+when we move data to our table then your txt or dat or json file is not available on hadoop location
+
+5. sample.dat is json file for this we have to sperate data with hive predefined function.
+   create one another table to store sample.dat data by the deliminater that is not present in   the sample.dat file.
+create table census_data(jsondata string)
+row format delimited
+fields terminated by '\t'
+stored as textfile;
+
+6.  load data local inpath '/sample.dat' into table census_data
+
+7. now create one another table according to ur requirement what data you would like to fetch from json sample.dat file
+
+create table census_data1(age int,income double)
+row format delimited
+stored as textfile;
+
+NOTE:
+In hive by default fields terminated is comma i.e.  ,
+
+8. now load data into our table from table that contains json data as a single column
+insert overwrite table census_data1
+select get_json_object(census_data.jsondata,'$.Age'),get_json_object(census_data.jsondata,'$.Income')
+from census_data;
+
+9  final query to fetch data
+
+select a.type,avg(c.income) from agegroup a join census_data1 c on a.age=c.age group by a.type;    
+
+
+census second query---------------
+
+1. store ur file on linux env(like /home/cloudera/Desktop)
+    by drag and drop using winscp server
+
+2. copy ur file on hadoop root 
+    hadoop fs -put /home/cloudera/Desktop/sample.dat /
+
+3. create one table 
+
+create table agegroup(age int,type string)
+row format delimited
+fields terminated by '\t'
+stored as textfile;
+
+4.  load data inpath '/agegroup.dat' into table agegroup
+
+NOTE: step 2 and 4 combine by one step there is a local keyword i.e. used with load command that first load the data to the hadoop then your table.
+    load data local inpath '/agegroup.dat' into table agegroup
+
+5. sample.dat is json file for this we have to sperate data with hive predefined function.
+   create one another table to store sample.dat data by the deliminater that is not present in   the sample.dat file.
+create table census_data(jsondata string)
+row format delimited fields terminated '\t'
+stored as textfile;
+
+6.  load data local inpath '/sample.dat' into table census_data
+
+7. now create one another table according to ur requirement what data you would like to fetch from json sample.dat file
+
+create table census_data2(age int,gender string)
+row format delimited
+stored as textfile;
+
+NOTE:In hive by default fields terminated is comma i.e.  ,
+
+8. now load data into our table from table that contains json data as a single column
+insert overwrite table census_data2
+select get_json_object(census_data.jsondata,'$.Age'),get_json_object(census_data.jsondata,'$.gender')
+from census_data;
+
+9. final query to fetch data
+select a.type,100*(sum(case when c.gender=' Male' then 1 else 0 end)/sum(case when c.gender=' Female' then 1 else 0 end) ) as ratio from census_data2 c join agegroup a on a.age=c.age  group by a.type;
+

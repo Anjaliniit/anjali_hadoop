@@ -1,0 +1,5 @@
+step1 = load '/user/hive/warehouse/project.db/census' using PigStorage(',') as(age:int,education:chararray,maritalstatus:chararray,gender:chararray,taxfilerstatus:chararray,income:double,Parents:chararray,countryofbirth:chararray,citizenship:chararray,weeksworked:chararray);
+step2 = foreach step1 generate income,age,gender;
+step3 = group step2 by gender;
+step4 = foreach step3 generate group,COUNT(step2.age);
+store step4 into '/user/cloudera/Planning_3'

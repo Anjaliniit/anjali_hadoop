@@ -1,0 +1,13 @@
+step1 = load '/user/hive/warehouse/project.db/census' using PigStorage(',') as(age:int,education:chararray,maritalstatus:chararray,gender:chararray,taxfilerstatus:chararray,income:double,Parents:chararray,countryofbirth:chararray,citizenship:chararray,weeksworked:chararray);
+step2 = foreach step1 generate income,age,gender
+step3 = foreach step2 generate 1 as flag,income;
+step4 = group step3 by flag;
+step5 = foreach step4 generate SUM(step3.income)/COUNT_STAR(step3.income) as percapita:chararray;
+step6 = foreach step5 generate CONCAT('Percapita income is : ',step5.percapita);
+store step6 into '/user/cloudera/finance_2'
+
+
+
+
+
+

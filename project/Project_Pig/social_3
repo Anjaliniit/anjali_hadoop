@@ -1,0 +1,6 @@
+step1 = load '/user/hive/warehouse/project.db/census' using PigStorage(',') as(age:int,education:chararray,maritalstatus:chararray,gender:chararray,taxfilerstatus:chararray,income:double,Parents:chararray,countryofbirth:chararray,citizenship:chararray,weeksworked:chararray);
+step2 = foreach step1 generate TRIM(gender) as g,TRIM(maritalstatus) as m;
+step3 = filter step2 by g=='Female' and (m=='Divorced' or m=='Widowed');
+step4 = group step3 by m;
+step5 = foreach step4 generate group, COUNT(step3.g);
+store step5 into '/user/cloudera/social_3'

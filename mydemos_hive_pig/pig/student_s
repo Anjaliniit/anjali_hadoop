@@ -1,0 +1,10 @@
+step1 = load '/results.dat' using PigStorage('\t') as (sid:int,result:chararray);
+step2 = load '/student.dat' using PigStorage('\t') as (name:chararray,sid:int);
+step3 = foreach step1 generate sid,result;
+step4 = foreach step2 generate name,sid;
+step5 = join step3 by sid,step4 by sid;
+step6 = filter step5 by (result == 'fail');
+store step6 into '/fail';
+step7 = filter step5 by (result == 'pass');
+store step7 into '/pass';
+

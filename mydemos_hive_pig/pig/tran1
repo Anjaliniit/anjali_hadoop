@@ -1,0 +1,4 @@
+a = load '/txns-large.dat' using PigStorage(',') as(tid,tdate,uid,amt,cat,prod,city,state,payment);
+b = filter a by amt>160;
+dump b;
+
